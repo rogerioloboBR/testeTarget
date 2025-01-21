@@ -3,32 +3,42 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using System.Linq;
+using TesteTarget;
 
 var option = ShowMenu();
 
-switch (option)
+do
 {
-    case "1":
-        CalcularFaturamento();
-        break;
-    case "2":
-        CalcularFibonacci();
-        break;
-    case "3":
-        InverterString();
-        break;
-    default:
-        Console.WriteLine("Opção inválida.");
-        break;
-}
+    switch (option)
+    {
+        case "1":
+            CalcularFaturamento();
+            break;
+        case "2":
+            CalcularFibonacci();
+            break;
+        case "3":
+            InverterString();
+            break;
+        default:
+            Console.WriteLine("Opção inválida.");
+            break;
+    }
+
+    // Exibe o menu novamente
+    option = ShowMenu();
+
+} while (option != "4"); // O loop continua até o usuário escolher a opção "4" para sair
 
 static string ShowMenu()
 {
     // Exibe o menu de opções
+    Console.Clear(); // Limpa a tela a cada exibição do menu
     Console.WriteLine("Escolha uma opção:");
     Console.WriteLine("1 - Calcular Faturamento");
-    Console.WriteLine("2 - Calcular Sequência Fibonacci");
+    Console.WriteLine("2 - Verificar Fibonacci");
     Console.WriteLine("3 - Inverter String");
+    Console.WriteLine("4 - Sair");
     Console.Write("Digite o número da opção: ");
     return Console.ReadLine() ?? string.Empty;
 }
@@ -38,7 +48,6 @@ static void CalcularFaturamento()
 {
     // Lê o arquivo JSON
     string json = File.ReadAllText(@"Resources\faturamento.json");
-
 
     // Desserializa os dados do JSON
     var faturamentoMensal = JsonConvert.DeserializeObject<List<Faturamento>>(json);
@@ -61,37 +70,53 @@ static void CalcularFaturamento()
     // Número de dias com faturamento superior à média
     var diasAcimaMedia = diasComFaturamento.Count(f => f.Valor > mediaFaturamento);
     Console.WriteLine($"Número de dias com faturamento superior à média: {diasAcimaMedia}");
+
+    Console.WriteLine("\nPressione qualquer tecla para voltar ao menu...");
+    Console.ReadKey();
 }
 
-// Método para calcular a sequência de Fibonacci
+// Método para verificar se um número pertence à sequência de Fibonacci
 static void CalcularFibonacci()
 {
-    Console.Write("Digite o número de termos da sequência de Fibonacci: ");
-    int n = int.Parse(Console.ReadLine());
+    Console.Write("Digite um número: ");
+    int numero = int.Parse(Console.ReadLine());
 
-    List<int> fibonacci = new List<int>();
-
-    // Condições iniciais
-    fibonacci.Add(0); // O primeiro número
-    if (n > 1)
+    if (numero < 0)
     {
-        fibonacci.Add(1); // O segundo número
+        Console.WriteLine("Número inválido. Digite um número não negativo.");
+        return;
     }
 
-    // Calcula a sequência de Fibonacci
-    for (int i = 2; i < n; i++)
+    // Variáveis para a sequência de Fibonacci
+    int a = 0, b = 1, proximo = 0;
+
+    // Verificando se o número informado é 0 ou 1 (casos especiais)
+    if (numero == 0 || numero == 1)
     {
-        int proximo = fibonacci[i - 1] + fibonacci[i - 2];
-        fibonacci.Add(proximo);
+        Console.WriteLine($"O número {numero} pertence à sequência de Fibonacci.");
+        return;
     }
 
-    // Exibe a sequência de Fibonacci
-    Console.WriteLine("Sequência de Fibonacci:");
-    foreach (var num in fibonacci)
+    // Calculando a sequência de Fibonacci
+    while (proximo < numero)
     {
-        Console.Write(num + " ");
+        proximo = a + b;
+        a = b;
+        b = proximo;
     }
-    Console.WriteLine();
+
+    // Verificando se o número informado pertence à sequência
+    if (proximo == numero)
+    {
+        Console.WriteLine($"O número {numero} pertence à sequência de Fibonacci.");
+    }
+    else
+    {
+        Console.WriteLine($"O número {numero} NÃO pertence à sequência de Fibonacci.");
+    }
+
+    Console.WriteLine("\nPressione qualquer tecla para voltar ao menu...");
+    Console.ReadKey();
 }
 
 // Método para inverter a string
@@ -112,11 +137,7 @@ static void InverterString()
     {
         Console.WriteLine("A string fornecida está vazia.");
     }
-}
 
-// Classe para representar os dados de faturamento
-public class Faturamento
-{
-    public int Dia { get; set; }
-    public double Valor { get; set; }
+    Console.WriteLine("\nPressione qualquer tecla para voltar ao menu...");
+    Console.ReadKey();
 }
