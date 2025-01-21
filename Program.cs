@@ -122,21 +122,27 @@ static void CalcularFibonacci()
 // Método para inverter a string
 static void InverterString()
 {
+    // Opção de string a ser invertida (pode ser entrada do usuário ou uma string definida no código)
     Console.Write("Digite a string para inverter: ");
     string input = Console.ReadLine();
 
-    if (!string.IsNullOrEmpty(input))
-    {
-        // Usa o método de Array.Reverse para inverter os caracteres da string
-        char[] array = input.ToCharArray();
-        Array.Reverse(array);
-        string invertedString = new string(array);
-        Console.WriteLine($"String invertida: {invertedString}");
-    }
-    else
+    if (string.IsNullOrEmpty(input))
     {
         Console.WriteLine("A string fornecida está vazia.");
+        return;
     }
+
+    // Variável para armazenar a string invertida
+    string invertedString = string.Empty;
+
+    // Invertendo a string manualmente, iterando do final para o início
+    for (int i = input.Length - 1; i >= 0; i--)
+    {
+        invertedString += input[i]; // Adiciona o caractere na posição 'i' à nova string
+    }
+
+    // Exibe a string invertida
+    Console.WriteLine($"String invertida: {invertedString}");
 
     Console.WriteLine("\nPressione qualquer tecla para voltar ao menu...");
     Console.ReadKey();
